@@ -1,0 +1,15 @@
+{
+  "redirects": [
+    {
+      "source": "/(.*)",
+      "has": [
+        {
+          "type": "host",
+          "value": "vitrinedomoradacarioca-78pi3ivts-bereniceahb-tis-projects.vercel.app"
+        }
+      ],
+      "destination": "https://conectageneralbruce.vercel.app/$1",
+      "permanent": true
+    }
+  ]
+}
