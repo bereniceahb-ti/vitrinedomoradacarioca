@@ -914,9 +914,37 @@
   </section>
 
   <!-- =========================================================
-       3. SOBRE O PROJETO
+       3. SERVIÇOS + FILTROS POR CATEGORIA
        ========================================================= -->
-  <section id="sobre" class="section-white">
+  <section id="servicos" class="section-white">
+    <div class="container">
+      <div class="section-divider"></div>
+      <h2 class="section-title">Serviços disponíveis</h2>
+      <p class="section-subtitle">Filtre por categoria para encontrar o que você precisa na sua região.</p>
+
+      <!-- Botões de filtro -->
+      <div class="filtros" role="tablist" aria-label="Filtrar por categoria">
+        <button class="filtro-btn ativo" data-categoria="todos">Todos</button>
+        <button class="filtro-btn" data-categoria="alimentacao">🍰 Alimentação</button>
+        <button class="filtro-btn" data-categoria="beleza">💅 Beleza</button>
+        <button class="filtro-btn" data-categoria="educacao">📚 Educação</button>
+        <button class="filtro-btn" data-categoria="manutencao">🔧 Manutenção</button>
+        <button class="filtro-btn" data-categoria="pets">🐶 Pets</button>
+        <button class="filtro-btn" data-categoria="saude">🩺 Saúde</button>
+        <button class="filtro-btn" data-categoria="domesticos">🧹 Serviços domésticos</button>
+        <button class="filtro-btn" data-categoria="tecnologia">💻 Tecnologia</button>
+        <button class="filtro-btn" data-categoria="artesanato">🧵 Artesanato</button>
+      </div>
+
+      <!-- Container que recebe os cards via JavaScript -->
+      <div class="servicos-grid" id="servicosGrid"></div>
+    </div>
+  </section>
+
+  <!-- =========================================================
+       4. SOBRE O PROJETO
+       ========================================================= -->
+  <section id="sobre" class="section-alt">
     <div class="container">
       <div class="section-divider"></div>
       <h2 class="section-title">Sobre o projeto</h2>
@@ -953,34 +981,6 @@
           </div>
         </div>
       </div>
-    </div>
-  </section>
-
-  <!-- =========================================================
-       4. SERVIÇOS + 5. FILTROS POR CATEGORIA
-       ========================================================= -->
-  <section id="servicos" class="section-alt">
-    <div class="container">
-      <div class="section-divider"></div>
-      <h2 class="section-title">Serviços disponíveis</h2>
-      <p class="section-subtitle">Filtre por categoria para encontrar o que você precisa na sua região.</p>
-
-      <!-- Botões de filtro -->
-      <div class="filtros" role="tablist" aria-label="Filtrar por categoria">
-        <button class="filtro-btn ativo" data-categoria="todos">Todos</button>
-        <button class="filtro-btn" data-categoria="alimentacao">🍰 Alimentação</button>
-        <button class="filtro-btn" data-categoria="beleza">💅 Beleza</button>
-        <button class="filtro-btn" data-categoria="educacao">📚 Educação</button>
-        <button class="filtro-btn" data-categoria="manutencao">🔧 Manutenção</button>
-        <button class="filtro-btn" data-categoria="pets">🐶 Pets</button>
-        <button class="filtro-btn" data-categoria="saude">🩺 Saúde</button>
-        <button class="filtro-btn" data-categoria="domesticos">🧹 Serviços domésticos</button>
-        <button class="filtro-btn" data-categoria="tecnologia">💻 Tecnologia</button>
-        <button class="filtro-btn" data-categoria="artesanato">🧵 Artesanato</button>
-      </div>
-
-      <!-- Container que recebe os cards via JavaScript -->
-      <div class="servicos-grid" id="servicosGrid"></div>
     </div>
   </section>
 
