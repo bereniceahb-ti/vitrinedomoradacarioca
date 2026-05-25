@@ -30,6 +30,10 @@
 // Deixe "" para desativar o salvamento de imagens.
 var PASTA_DRIVE_ID = "";
 
+// Email que recebe as notificações de novos cadastros e solicitações
+// de alteração/remoção. Pode incluir múltiplos separados por vírgula.
+var EMAIL_NOTIFICACAO = "bereniceahb.ti@gmail.com";
+
 // Nomes das abas — só altere se renomear as abas na planilha
 var ABA_CADASTROS    = "Cadastros";
 var ABA_SOLICITACOES = "Solicitações";
@@ -246,7 +250,7 @@ function salvarImagemDrive(base64, nomeArquivo) {
 
 // =============================================================
 //  Envia email de notificação à responsável pelo projeto
-//  Destinatário = email da conta dona do Apps Script.
+//  Destinatário = constante EMAIL_NOTIFICACAO definida no topo.
 //  Falhas no envio NÃO interrompem a gravação na planilha.
 //
 //  IMPORTANTE: na primeira execução após colar este código,
@@ -255,13 +259,12 @@ function salvarImagemDrive(base64, nomeArquivo) {
 // =============================================================
 function enviarEmailNotificacao(assunto, corpo) {
   try {
-    var destinatario = Session.getActiveUser().getEmail();
-    if (!destinatario) {
-      Logger.log("Email do usuário ativo não disponível — notificação não enviada.");
+    if (!EMAIL_NOTIFICACAO) {
+      Logger.log("EMAIL_NOTIFICACAO não configurado — notificação não enviada.");
       return;
     }
     MailApp.sendEmail({
-      to:      destinatario,
+      to:      EMAIL_NOTIFICACAO,
       subject: assunto,
       body:    corpo
     });
