@@ -28,7 +28,7 @@
 // ID da pasta do Google Drive onde as imagens são salvas.
 // Encontre na URL da pasta: drive.google.com/drive/folders/SEU_ID_AQUI
 // Deixe "" para desativar o salvamento de imagens.
-var PASTA_DRIVE_ID = "";
+var PASTA_DRIVE_ID = "1pCJtUDQ8-0L04lH2y4vpffVFLw6zPPwm";
 
 // Email que recebe as notificações de novos cadastros e solicitações
 // de alteração/remoção. Pode incluir múltiplos separados por vírgula.
@@ -240,7 +240,11 @@ function salvarImagemDrive(base64, nomeArquivo) {
     var arquivo = pasta.createFile(blob);
     arquivo.setSharing(DriveApp.Access.ANYONE_WITH_LINK, DriveApp.Permission.VIEW);
 
-    return "https://drive.google.com/uc?id=" + arquivo.getId();
+    // URL no formato lh3.googleusercontent.com — funciona para
+    // embed em sites externos (o antigo drive.google.com/uc?id=...
+    // foi descontinuado pelo Google e redireciona para uma página
+    // de aviso, quebrando a tag <img> no site).
+    return "https://lh3.googleusercontent.com/d/" + arquivo.getId();
   } catch (err) {
     Logger.log("Erro ao salvar imagem: " + err);
     return "";
