@@ -820,6 +820,89 @@
       border: 1px solid rgba(14,111,121,0.3);
     }
 
+    /* ---------- Contato com a administração ---------- */
+    .contato-wrapper {
+      display: grid;
+      grid-template-columns: 1fr 1.2fr;
+      gap: 40px;
+      align-items: center;
+      max-width: 1000px;
+      margin: 0 auto;
+    }
+
+    .contato-intro {
+      text-align: center;
+      padding: 10px;
+    }
+
+    .contato-icone {
+      width: 88px;
+      height: 88px;
+      margin: 0 auto 20px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, var(--petroleo) 0%, var(--petroleo-hover) 100%);
+      color: var(--branco);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 2.3rem;
+      box-shadow: 0 8px 24px rgba(14, 111, 121, 0.30);
+      border: 4px solid var(--mostarda-light);
+      animation: contato-pulse 2.8s ease-in-out infinite;
+    }
+
+    @keyframes contato-pulse {
+      0%, 100% { transform: scale(1);     box-shadow: 0 8px 24px rgba(14, 111, 121, 0.30); }
+      50%      { transform: scale(1.05);  box-shadow: 0 12px 30px rgba(217, 164, 0, 0.35); }
+    }
+
+    .contato-texto {
+      color: var(--texto-suave);
+      font-size: 1rem;
+      line-height: 1.65;
+      max-width: 380px;
+      margin: 0 auto 20px;
+    }
+
+    .contato-frase {
+      color: var(--marrom);
+      font-style: italic;
+      font-weight: 600;
+      font-size: 0.95rem;
+      padding-top: 14px;
+      border-top: 2px dashed var(--bege);
+      max-width: 340px;
+      margin: 0 auto;
+    }
+
+    .contato-card {
+      background: var(--branco);
+      border-radius: var(--radius);
+      padding: 34px;
+      box-shadow: var(--sombra);
+      border-top: 4px solid var(--mostarda);
+      position: relative;
+      overflow: hidden;
+      animation: contato-fadein 0.7s ease-out both;
+    }
+
+    .contato-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      right: 0;
+      width: 90px;
+      height: 90px;
+      background: linear-gradient(225deg, var(--petroleo-light), transparent);
+      border-bottom-left-radius: 90px;
+      pointer-events: none;
+    }
+
+    @keyframes contato-fadein {
+      from { opacity: 0; transform: translateY(14px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
     /* =========================================================
        RESPONSIVO (Mobile First)
        ========================================================= */
@@ -857,6 +940,8 @@
       .sobre-grid { grid-template-columns: 1fr; gap: 24px; }
       .passos { grid-template-columns: 1fr; }
       .form-wrapper { padding: 24px 20px; }
+      .contato-wrapper { grid-template-columns: 1fr; gap: 28px; }
+      .contato-card { padding: 24px 20px; }
 
       section { padding: 52px 0; }
     }
@@ -894,6 +979,7 @@
           <li><a href="#cadastrar">Cadastrar</a></li>
           <li><a href="#alterar-remover">Alterar/remover</a></li>
           <li><a href="#sobre">Sobre</a></li>
+          <li><a href="#contato">Contato</a></li>
         </ul>
       </nav>
     </div>
@@ -1235,6 +1321,71 @@
           <li>A negociação de valores, pagamento, entrega e execução dos serviços são de <strong>responsabilidade direta entre anunciante e contratante</strong>. O projeto não intermedia nem se responsabiliza por essas etapas.</li>
           <li>Este é um projeto <strong>gratuito e comunitário</strong>, desenvolvido como iniciativa de extensão universitária sem fins lucrativos.</li>
         </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- =========================================================
+       9.5. CONTATO COM A ADMINISTRAÇÃO DA PLATAFORMA
+       Formulário enviado via FormSubmit (https://formsubmit.co)
+       — solução sem backend, sem chave de API, sem conta.
+       O endpoint AJAX retorna JSON, então conseguimos exibir
+       a mensagem de sucesso inline sem sair da página.
+       ========================================================= -->
+  <section id="contato" class="section-white">
+    <div class="container">
+      <div class="section-divider"></div>
+      <h2 class="section-title">Fale com a Administração da Plataforma</h2>
+      <p class="section-subtitle">Dúvidas, sugestões, alterações de anúncios ou apoio ao projeto? Entre em contato.</p>
+
+      <div class="contato-wrapper">
+        <div class="contato-intro">
+          <div class="contato-icone" aria-hidden="true">💬</div>
+          <p class="contato-texto">
+            O Conecta General Bruce é um projeto comunitário gratuito e colaborativo.
+            Caso precise de ajuda, queira sugerir melhorias, solicitar alterações em
+            anúncios ou apoiar a iniciativa, envie uma mensagem para a administração
+            da plataforma.
+          </p>
+          <p class="contato-frase">“Juntos construímos uma vizinhança mais conectada.” 💛</p>
+        </div>
+
+        <div class="contato-card">
+          <form id="formContato" novalidate>
+            <div class="form-row">
+              <label for="contato-nome">Nome</label>
+              <input type="text" id="contato-nome" name="name" placeholder="Como você se chama?" required />
+            </div>
+
+            <div class="form-row">
+              <label for="contato-email">E-mail</label>
+              <input type="email" id="contato-email" name="email" placeholder="seuemail@exemplo.com" required />
+            </div>
+
+            <div class="form-row">
+              <label for="contato-assunto">Assunto</label>
+              <input type="text" id="contato-assunto" name="_subject" placeholder="Ex: Sugestão, dúvida, alteração de anúncio…" required />
+            </div>
+
+            <div class="form-row">
+              <label for="contato-mensagem">Mensagem</label>
+              <textarea id="contato-mensagem" name="message" rows="5" placeholder="Escreva sua mensagem com detalhes…" required></textarea>
+            </div>
+
+            <!-- Honeypot anti-spam do FormSubmit (campo invisível para bots) -->
+            <input type="text" name="_honey" style="display:none" tabindex="-1" autocomplete="off" aria-hidden="true" />
+            <!-- Desabilita o captcha do FormSubmit (UX mais limpa) -->
+            <input type="hidden" name="_captcha" value="false" />
+            <!-- Template "table" deixa o email recebido mais legível -->
+            <input type="hidden" name="_template" value="table" />
+
+            <button type="submit" class="btn btn-azul" style="width:100%;margin-top:8px;">Enviar mensagem</button>
+
+            <div id="formContatoMsg" class="form-msg" role="status" aria-live="polite">
+              ✅ <strong>Mensagem enviada com sucesso!</strong> Em breve retornaremos seu contato.
+            </div>
+          </form>
+        </div>
       </div>
     </div>
   </section>
@@ -1590,6 +1741,66 @@
       } finally {
         submitBtnRemocao.disabled = false;
         submitBtnRemocao.textContent = textoOriginal;
+      }
+    });
+
+    /* ---------------------------------------------------------
+       Formulário de CONTATO COM A ADMINISTRAÇÃO
+       Envia via FormSubmit (https://formsubmit.co) → AJAX/JSON
+       Para alterar o email destinatário: troque o endereço na
+       URL abaixo. Lembre-se de que o FormSubmit pede confirmação
+       (clique de ativação no email) na primeira mensagem enviada
+       para um endereço novo.
+       --------------------------------------------------------- */
+    const FORMSUBMIT_URL = "https://formsubmit.co/ajax/bereniceahb.ti@gmail.com";
+
+    const formContato = document.getElementById("formContato");
+    const submitBtnContato = formContato.querySelector('button[type="submit"]');
+
+    formContato.addEventListener("submit", async (e) => {
+      e.preventDefault();
+      if (!formContato.checkValidity()) {
+        formContato.reportValidity();
+        return;
+      }
+
+      submitBtnContato.disabled = true;
+      const textoOriginal = submitBtnContato.textContent;
+      submitBtnContato.textContent = "Enviando...";
+
+      // Monta payload a partir do form (FormSubmit aceita JSON simples)
+      const dados = {};
+      new FormData(formContato).forEach((v, k) => { dados[k] = v; });
+
+      try {
+        const resp = await fetch(FORMSUBMIT_URL, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            "Accept": "application/json"
+          },
+          body: JSON.stringify(dados)
+        });
+        const result = await resp.json();
+
+        // FormSubmit retorna { success: "true", message: "..." } em caso de êxito.
+        // Na PRIMEIRA mensagem ao destinatário, ele retorna sucesso mas envia um
+        // email de confirmação ao destinatário. Só depois da confirmação as
+        // mensagens reais começam a chegar.
+        if (result.success === "true" || result.success === true) {
+          mostrarMensagem("formContatoMsg",
+            '✅ <strong>Mensagem enviada com sucesso!</strong> Em breve retornaremos seu contato.');
+          formContato.reset();
+        } else {
+          throw new Error(result.message || "Falha no envio");
+        }
+      } catch (err) {
+        console.error("Erro no envio do contato:", err);
+        mostrarMensagem("formContatoMsg",
+          '⚠️ <strong>Ops!</strong> Não conseguimos enviar agora. Verifique sua conexão e tente novamente.', "erro");
+      } finally {
+        submitBtnContato.disabled = false;
+        submitBtnContato.textContent = textoOriginal;
       }
     });
 
