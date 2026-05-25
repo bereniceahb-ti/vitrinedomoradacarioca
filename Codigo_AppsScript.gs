@@ -147,6 +147,23 @@ function processarCadastro(p) {
     limpar(p.taxa_entrega)   // M: taxa_entrega (novo)
   ]);
 
+  // Notificação por email à responsável pelo projeto
+  enviarEmailNotificacao(
+    "🆕 Novo cadastro pendente — Conecta General Bruce",
+    "Um novo serviço foi cadastrado e está aguardando sua aprovação.\n\n" +
+    "Nome: "       + (p.nome      || "-") + "\n" +
+    "Serviço: "    + (p.servico   || "-") + "\n" +
+    "Categoria: "  + (p.categoria || "-") + "\n" +
+    "Localização: "+ (p.bloco     || "-") + "\n" +
+    "WhatsApp: "   + (p.whatsapp  || "-") + "\n" +
+    "Descrição: "  + (p.descricao || "-") + "\n\n" +
+    "Entrega: "      + (p.entrega      || "-") + "\n" +
+    "Área: "         + (p.area_entrega || "-") + "\n" +
+    "Taxa: "         + (p.taxa_entrega || "-") + "\n\n" +
+    "👉 Para publicar no site, abra a aba \"" + ABA_CADASTROS + "\" da planilha " +
+    "e preencha \"SIM\" na coluna I (aprovado) da linha correspondente."
+  );
+
   return jsonResponse({ ok: true, mensagem: "Cadastro recebido. Aguardando aprovação." });
 }
 
@@ -188,6 +205,19 @@ function processarSolicitacao(p) {
     limpar(p.mensagem_solicitacao)       // G: mensagem / detalhes
   ]);
 
+  // Notificação por email à responsável pelo projeto
+  enviarEmailNotificacao(
+    "✏️ Nova solicitação de " + (p.acao_solicitada || "alteração/remoção") +
+      " — Conecta General Bruce",
+    "Uma nova solicitação foi recebida pelo formulário do site.\n\n" +
+    "Ação: "      + (p.acao_solicitada      || "-") + "\n" +
+    "Anúncio: "   + (p.anuncio_referencia   || "-") + "\n" +
+    "Nome: "      + (p.nome_solicitante     || "-") + "\n" +
+    "WhatsApp: "  + (p.whatsapp_solicitante || "-") + "\n\n" +
+    "Mensagem:\n" + (p.mensagem_solicitacao || "-") + "\n\n" +
+    "👉 Acesse a aba \"" + ABA_SOLICITACOES + "\" da planilha para processar."
+  );
+
   return jsonResponse({ ok: true, mensagem: "Solicitação recebida com sucesso." });
 }
 
@@ -210,6 +240,33 @@ function salvarImagemDrive(base64, nomeArquivo) {
   } catch (err) {
     Logger.log("Erro ao salvar imagem: " + err);
     return "";
+  }
+}
+
+
+// =============================================================
+//  Envia email de notificação à responsável pelo projeto
+//  Destinatário = email da conta dona do Apps Script.
+//  Falhas no envio NÃO interrompem a gravação na planilha.
+//
+//  IMPORTANTE: na primeira execução após colar este código,
+//  o Apps Script vai pedir autorização para o escopo de email
+//  (MailApp). Aceite normalmente.
+// =============================================================
+function enviarEmailNotificacao(assunto, corpo) {
+  try {
+    var destinatario = Session.getActiveUser().getEmail();
+    if (!destinatario) {
+      Logger.log("Email do usuário ativo não disponível — notificação não enviada.");
+      return;
+    }
+    MailApp.sendEmail({
+      to:      destinatario,
+      subject: assunto,
+      body:    corpo
+    });
+  } catch (err) {
+    Logger.log("Erro ao enviar email de notificação: " + err);
   }
 }
 
