@@ -434,8 +434,8 @@
     /* ---------- Cards de serviços ---------- */
     .servicos-grid {
       display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-      gap: 22px;
+      grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+      gap: 24px;
     }
 
     .card {
@@ -445,15 +445,15 @@
       box-shadow: var(--sombra-card);
       display: flex;
       flex-direction: column;
-      transition: transform 0.22s, box-shadow 0.22s;
+      transition: transform 0.25s ease, box-shadow 0.25s ease, border-color 0.25s ease;
       border: 1px solid var(--borda);
       border-top: 3px solid var(--petroleo);
       position: relative;
-      overflow: hidden;
+      /* NÃO usar overflow:hidden no card — o wrapper da imagem já controla o clipping */
     }
 
     .card:hover {
-      transform: translateY(-5px);
+      transform: translateY(-6px);
       box-shadow: var(--sombra-hover);
       border-top-color: var(--mostarda);
     }
@@ -472,69 +472,160 @@
       letter-spacing: 0.2px;
     }
 
-    /* Imagem do serviço no topo do card */
-    .card-imagem {
+    /* ── Wrapper da imagem — proporção 4:5 estilo Instagram ── */
+    .card-imagem-wrapper {
       width: calc(100% + 44px);
-      margin: -22px -22px 14px -22px;
-      aspect-ratio: 1 / 1;
-      object-fit: cover;
+      margin: -22px -22px 18px -22px;
+      aspect-ratio: 4 / 5;
+      overflow: hidden;
+      position: relative;
       background: var(--bege-fundo);
-      display: block;
+      border-radius: var(--radius) var(--radius) 0 0;
+      flex-shrink: 0;
     }
-    .card-imagem.placeholder {
-      background: linear-gradient(135deg, var(--petroleo-light) 0%, var(--mostarda-light) 100%);
+
+    /* Imagem real */
+    .card-imagem {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      object-position: center;
+      display: block;
+      transition: transform 0.45s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    }
+
+    /* Zoom suave ao passar o mouse — contido pelo wrapper */
+    .card:hover .card-imagem {
+      transform: scale(1.06);
+    }
+
+    /* Overlay de gradiente sutil na parte inferior da imagem */
+    .card-imagem-wrapper::after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      height: 48px;
+      background: linear-gradient(to top, rgba(14, 111, 121, 0.10), transparent);
+      pointer-events: none;
+    }
+
+    /* Placeholder elegante (sem imagem) */
+    .card-imagem-wrapper.placeholder {
+      background: linear-gradient(145deg, var(--petroleo-light) 0%, var(--bege-fundo) 50%, var(--mostarda-light) 100%);
       display: flex;
       align-items: center;
       justify-content: center;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .card-imagem-wrapper.placeholder .placeholder-emoji {
+      font-size: 4rem;
+      opacity: 0.45;
+      display: block;
+      line-height: 1;
+    }
+
+    .card-imagem-wrapper.placeholder .placeholder-label {
+      font-size: 0.78rem;
       color: var(--petroleo);
-      opacity: 0.65;
-      font-size: 3.5rem;
+      opacity: 0.55;
+      font-weight: 600;
+      letter-spacing: 0.5px;
+      text-transform: uppercase;
+    }
+
+    /* ── Conteúdo do card ── */
+    .card-content {
+      display: flex;
+      flex-direction: column;
+      flex-grow: 1;
     }
 
     .card h3 {
       color: var(--petroleo);
-      font-size: 1.15rem;
-      margin-bottom: 8px;
+      font-size: 1.12rem;
+      margin-bottom: 6px;
       font-weight: 700;
+      line-height: 1.3;
+      /* Limitar a 2 linhas para uniformidade */
+      display: -webkit-box;
+      -webkit-line-clamp: 2;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
     }
 
     .card .prestador {
       color: var(--mostarda-hover);
       font-weight: 700;
-      font-size: 0.95rem;
-      margin-bottom: 8px;
+      font-size: 0.88rem;
+      margin-bottom: 10px;
       display: flex;
       align-items: center;
-      gap: 4px;
+      gap: 5px;
+    }
+
+    /* Separador sutil entre cabeçalho e descrição */
+    .card-separator {
+      height: 1px;
+      background: var(--borda);
+      margin: 0 0 12px;
+      opacity: 0.6;
     }
 
     .card p.descricao {
       color: var(--texto-suave);
-      font-size: 0.93rem;
+      font-size: 0.90rem;
       margin-bottom: 14px;
       flex-grow: 1;
       line-height: 1.55;
+      /* Limitar a 3 linhas — uniformidade entre cards */
+      display: -webkit-box;
+      -webkit-line-clamp: 10;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+    }
+
+    /* Área de meta-info (localização + entrega) */
+    .card-meta {
+      margin-bottom: 14px;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
     }
 
     .card .bloco {
-      font-size: 0.84rem;
+      font-size: 0.82rem;
       color: var(--texto-suave);
-      margin-bottom: 10px;
       display: flex;
       align-items: center;
-      gap: 4px;
+      gap: 5px;
     }
 
     /* Bloco de informações de entrega no card */
     .card .entrega-info {
       background: var(--bege-fundo);
       border-radius: var(--radius-sm);
-      padding: 10px 12px;
-      margin-bottom: 14px;
-      font-size: 0.85rem;
+      padding: 9px 12px;
+      margin-bottom: 0;
+      font-size: 0.82rem;
       color: var(--texto-suave);
-      line-height: 1.7;
+      line-height: 1.65;
       border-left: 3px solid var(--mostarda);
+    }
+
+    /* Bloco de horários de atendimento no card */
+    .card .horarios-info {
+      background: var(--petroleo-light);
+      border-radius: var(--radius-sm);
+      padding: 9px 12px;
+      margin-bottom: 0;
+      font-size: 0.82rem;
+      color: var(--texto);
+      line-height: 1.65;
+      border-left: 3px solid var(--petroleo);
     }
 
     .btn-whatsapp {
@@ -830,6 +921,67 @@
 
     .redes-grid .form-row { margin-bottom: 0; }
 
+    /* ---------- Dias e horários de atendimento (formulário) ---------- */
+    .dias-grid {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-top: 4px;
+    }
+
+    .dia-chip {
+      position: relative;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-width: 56px;
+      padding: 9px 14px;
+      margin: 0;
+      border: 1.5px solid var(--borda);
+      border-radius: 50px;
+      background: var(--branco);
+      color: var(--texto-suave);
+      font-size: 0.9rem;
+      font-weight: 600;
+      cursor: pointer;
+      user-select: none;
+      transition: background 0.18s ease, color 0.18s ease, border-color 0.18s ease, box-shadow 0.18s ease, transform 0.18s ease;
+    }
+
+    .dia-chip input {
+      position: absolute;
+      opacity: 0;
+      width: 0;
+      height: 0;
+      pointer-events: none;
+    }
+
+    .dia-chip:hover {
+      border-color: var(--petroleo);
+      color: var(--petroleo);
+    }
+
+    .dia-chip:has(input:checked) {
+      background: var(--petroleo);
+      border-color: var(--petroleo);
+      color: var(--branco);
+      box-shadow: 0 3px 10px rgba(14, 111, 121, 0.25);
+      transform: translateY(-1px);
+    }
+
+    .dia-chip:focus-within {
+      outline: 2px solid var(--petroleo);
+      outline-offset: 2px;
+    }
+
+    .horarios-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 14px 20px;
+    }
+
+    .horarios-grid .form-row { margin-bottom: 0; }
+
     .rede-icone {
       display: inline-flex;
       width: 24px;
@@ -1033,6 +1185,8 @@
       .contato-wrapper { grid-template-columns: 1fr; gap: 28px; }
       .contato-card { padding: 24px 20px; }
       .redes-grid { grid-template-columns: 1fr; gap: 12px; }
+      .horarios-grid { grid-template-columns: 1fr 1fr; gap: 12px; }
+      .dia-chip { min-width: 48px; padding: 8px 12px; font-size: 0.88rem; }
 
       section { padding: 52px 0; }
     }
@@ -1274,6 +1428,9 @@
             <select id="area_entrega" name="area_entrega" required>
               <option value="">Selecione...</option>
               <option value="Apenas no local de origem">Apenas no local de origem</option>
+              <option value="Somente no condomínio Morada Carioca">Somente no condomínio Morada Carioca</option>
+              <option value="Somente no Condomínio Neo Life">Somente no Condomínio Neo Life</option>
+              <option value="Somente nos condomínios Morada Carioca e Neo Life">Somente nos condomínios Morada Carioca e Neo Life</option>
               <option value="Rua General Bruce">Rua General Bruce</option>
               <option value="General Bruce e arredores">General Bruce e arredores</option>
               <option value="Vila Isabel">Vila Isabel</option>
@@ -1294,6 +1451,39 @@
               <option value="Valor fixo (ver descrição)">Valor fixo (informado na descrição)</option>
               <option value="Não se aplica">Não se aplica</option>
             </select>
+          </div>
+
+          <p class="form-group-title">🕒 Dias e horários de atendimento <span style="font-weight:400;font-size:0.85rem;color:var(--texto-suave);">(opcional)</span></p>
+
+          <div class="form-row">
+            <label>Dias da semana em que atende</label>
+            <div class="dias-grid" role="group" aria-label="Dias da semana em que atende">
+              <label class="dia-chip"><input type="checkbox" name="dias_semana" value="seg" /><span>Seg</span></label>
+              <label class="dia-chip"><input type="checkbox" name="dias_semana" value="ter" /><span>Ter</span></label>
+              <label class="dia-chip"><input type="checkbox" name="dias_semana" value="qua" /><span>Qua</span></label>
+              <label class="dia-chip"><input type="checkbox" name="dias_semana" value="qui" /><span>Qui</span></label>
+              <label class="dia-chip"><input type="checkbox" name="dias_semana" value="sex" /><span>Sex</span></label>
+              <label class="dia-chip"><input type="checkbox" name="dias_semana" value="sab" /><span>Sáb</span></label>
+              <label class="dia-chip"><input type="checkbox" name="dias_semana" value="dom" /><span>Dom</span></label>
+            </div>
+            <small class="form-hint">Toque nos dias em que você atende. Pode marcar quantos quiser.</small>
+          </div>
+
+          <div class="horarios-grid">
+            <div class="form-row">
+              <label for="horario_inicio">Horário inicial</label>
+              <input type="time" id="horario_inicio" name="horario_inicio" />
+            </div>
+            <div class="form-row">
+              <label for="horario_fim">Horário final</label>
+              <input type="time" id="horario_fim" name="horario_fim" />
+            </div>
+          </div>
+
+          <div class="form-row">
+            <label for="horario_entrega">Horário de entrega <span style="font-weight:400;color:var(--texto-suave);">(opcional)</span></label>
+            <input type="text" id="horario_entrega" name="horario_entrega" placeholder="Ex: 11h às 14h e 18h às 22h" />
+            <small class="form-hint">Use este campo se o horário de entrega for diferente do horário de atendimento.</small>
           </div>
 
           <p class="form-group-title">📸 Imagem (opcional)</p>
@@ -1594,10 +1784,20 @@
         const linkWhats = `https://wa.me/${whats}?text=${msgWhats}`;
         const nomeCategoria = CATEGORIAS[s.categoria] || s.categoria;
 
-        // Bloco da imagem: usa imagem_url se disponível; senão, placeholder com emoji
+        // Bloco da imagem: wrapper 4:5 (Instagram) com zoom suave no hover
+        const emoji = (nomeCategoria.match(/^\S+/) || ["🏘️"])[0];
         const imagemHTML = s.imagem_url
-          ? `<img class="card-imagem" src="${s.imagem_url}" alt="Imagem do serviço ${s.servico}" loading="lazy" referrerpolicy="no-referrer" />`
-          : `<div class="card-imagem placeholder" aria-hidden="true">${(nomeCategoria.match(/^\S+/) || ["🏘️"])[0]}</div>`;
+          ? `<div class="card-imagem-wrapper">
+               <img class="card-imagem"
+                    src="${s.imagem_url}"
+                    alt="Imagem do serviço ${s.servico}"
+                    loading="lazy"
+                    referrerpolicy="no-referrer" />
+             </div>`
+          : `<div class="card-imagem-wrapper placeholder" aria-hidden="true">
+               <span class="placeholder-emoji">${emoji}</span>
+               <span class="placeholder-label">${nomeCategoria.replace(/^\S+\s*/, '')}</span>
+             </div>`;
 
         // Bloco de informações de entrega (exibe somente se houver dados)
         let entregaHTML = "";
@@ -1607,16 +1807,46 @@
 
         if (entrega || areaEntrega || taxaEntrega) {
           const linhaEntrega = entrega
-            ? `🚚 <strong>Entrega/atendimento:</strong> ${entrega}<br>`
-            : `🚚 <strong>Entrega/atendimento:</strong> Não informado<br>`;
+            ? `🚚 <strong>Entrega/atendimento em domicílio:</strong> ${entrega}<br>`
+            : `🚚 <strong>Entrega/atendimento em domicílio:</strong> Não informado<br>`;
           const linhaArea = areaEntrega
-            ? `📍 <strong>Área:</strong> ${areaEntrega}<br>`
+            ? `📍 <strong>Área de entrega/atendimento:</strong> ${areaEntrega}<br>`
             : "";
           const linhaTaxa = taxaEntrega
             ? `💰 <strong>Taxa:</strong> ${taxaEntrega}`
             : "";
 
           entregaHTML = `<div class="entrega-info">${linhaEntrega}${linhaArea}${linhaTaxa}</div>`;
+        }
+
+        // Bloco de horários de atendimento (exibe somente se houver dados)
+        let horariosHTML = "";
+        const diasAtend     = s.dias_atendimento || "";
+        const horarioInicio = s.horario_inicio   || "";
+        const horarioFim    = s.horario_fim      || "";
+        const horarioEntr   = s.horario_entrega  || "";
+
+        if (diasAtend || horarioInicio || horarioFim || horarioEntr) {
+          const diasFormatado = diasAtend ? formatarDiasSemana(diasAtend) : "";
+          const linhaDias = diasFormatado
+            ? `🗓 <strong>Dias de atendimento:</strong> ${diasFormatado}<br>`
+            : "";
+
+          let linhaHoras = "";
+          if (horarioInicio && horarioFim) {
+            linhaHoras = `🕒 <strong>Horários:</strong> ${formatarHora(horarioInicio)} às ${formatarHora(horarioFim)}<br>`;
+          } else if (horarioInicio || horarioFim) {
+            linhaHoras = `🕒 <strong>Horários:</strong> ${formatarHora(horarioInicio || horarioFim)}<br>`;
+          }
+
+          const linhaEntregaHr = horarioEntr
+            ? `🛵 <strong>Horário de entrega:</strong> ${horarioEntr}`
+            : "";
+
+          const conteudo = linhaDias + linhaHoras + linhaEntregaHr;
+          if (conteudo.trim()) {
+            horariosHTML = `<div class="horarios-info">${conteudo.replace(/<br>$/, "")}</div>`;
+          }
         }
 
         // Bloco de redes sociais: gera um ícone clicável por link preenchido.
@@ -1654,16 +1884,22 @@
         card.className = "card";
         card.innerHTML = `
           ${imagemHTML}
-          <span class="card-categoria">${nomeCategoria}</span>
-          <h3>${s.servico}</h3>
-          <p class="prestador">👤 ${s.nome}</p>
-          <p class="descricao">${s.descricao}</p>
-          <p class="bloco">📍 ${s.bloco}</p>
-          ${entregaHTML}
-          ${redesHTML}
-          <a href="${linkWhats}" target="_blank" rel="noopener" class="btn-whatsapp" aria-label="Contatar ${s.nome} via WhatsApp">
-            💬 Falar no WhatsApp
-          </a>
+          <div class="card-content">
+            <span class="card-categoria">${nomeCategoria}</span>
+            <h3>${s.servico}</h3>
+            <p class="prestador">👤 ${s.nome}</p>
+            <div class="card-separator"></div>
+            <p class="descricao">${s.descricao}</p>
+            <div class="card-meta">
+              <span class="bloco">📍 ${s.bloco}</span>
+              ${entregaHTML}
+              ${horariosHTML}
+            </div>
+            ${redesHTML}
+            <a href="${linkWhats}" target="_blank" rel="noopener" class="btn-whatsapp" aria-label="Contatar ${s.nome} via WhatsApp">
+              💬 Falar no WhatsApp
+            </a>
+          </div>
         `;
         grid.appendChild(card);
       });
@@ -1722,6 +1958,59 @@
     });
 
     /* ---------------------------------------------------------
+       Utilitário: formata um horário "HH:MM" como "08h" ou "08h30".
+       Aceita também strings já formatadas — devolve o valor original
+       se não reconhecer o padrão HH:MM.
+       --------------------------------------------------------- */
+    function formatarHora(valor) {
+      if (!valor) return "";
+      const s = String(valor).trim();
+      const m = s.match(/^(\d{1,2}):(\d{2})/);
+      if (!m) return s;
+      const h = m[1].padStart(2, "0");
+      const min = m[2];
+      return min === "00" ? `${h}h` : `${h}h${min}`;
+    }
+
+    /* ---------------------------------------------------------
+       Utilitário: formata uma lista de dias (códigos curtos
+       separados por vírgula — ex.: "seg,ter,qua,qui,sex,sab")
+       de modo legível. Se forem todos os 7 dias devolve
+       "Todos os dias"; se forem contíguos com 3+ dias devolve
+       um intervalo (ex.: "Segunda a sábado"); caso contrário
+       devolve a lista separada por vírgulas.
+       --------------------------------------------------------- */
+    const _DIAS_ORDEM = ["seg","ter","qua","qui","sex","sab","dom"];
+    const _DIAS_NOMES = {
+      seg: "Segunda", ter: "Terça", qua: "Quarta",
+      qui: "Quinta",  sex: "Sexta", sab: "Sábado", dom: "Domingo"
+    };
+    function formatarDiasSemana(valor) {
+      if (!valor) return "";
+      const codes = String(valor)
+        .toLowerCase()
+        .split(/[,;\s]+/)
+        .map(c => c.trim())
+        .filter(c => _DIAS_NOMES[c]);
+      if (codes.length === 0) return String(valor).trim();
+      if (codes.length === 7) return "Todos os dias";
+
+      const indices = Array.from(new Set(codes.map(c => _DIAS_ORDEM.indexOf(c))))
+                           .sort((a, b) => a - b);
+
+      let contiguo = true;
+      for (let i = 1; i < indices.length; i++) {
+        if (indices[i] !== indices[i - 1] + 1) { contiguo = false; break; }
+      }
+      if (contiguo && indices.length >= 3) {
+        const ini = _DIAS_NOMES[_DIAS_ORDEM[indices[0]]];
+        const fim = _DIAS_NOMES[_DIAS_ORDEM[indices[indices.length - 1]]].toLowerCase();
+        return `${ini} a ${fim}`;
+      }
+      return indices.map(i => _DIAS_NOMES[_DIAS_ORDEM[i]]).join(", ");
+    }
+
+    /* ---------------------------------------------------------
        Utilitário: normaliza URL — se o usuário digitou um link
        sem http:// ou https://, prefixa https:// automaticamente.
        Retorna "" para entradas vazias.
@@ -1760,8 +2049,10 @@
        Formulário de CADASTRO DE SERVIÇO
        Campos enviados para o Apps Script:
          tipo_solicitacao, nome, bloco, whatsapp, servico, categoria,
-         descricao, entrega, area_entrega, taxa_entrega, autorizado,
-         imagem_base64 (opcional), imagem_nome (opcional)
+         descricao, entrega, area_entrega, taxa_entrega,
+         dias_atendimento, horario_inicio, horario_fim, horario_entrega,
+         instagram, facebook, tiktok, site, whatsapp_link, outro_link,
+         autorizado, imagem_base64 (opcional), imagem_nome (opcional)
        --------------------------------------------------------- */
     const formCadastro = document.getElementById("formCadastro");
     const submitBtnCadastro = formCadastro.querySelector('button[type="submit"]');
@@ -1817,6 +2108,16 @@
       data.append("entrega",     formCadastro.entrega.value);
       data.append("area_entrega",  formCadastro.area_entrega.value);
       data.append("taxa_entrega",  formCadastro.taxa_entrega.value);
+
+      // Dias e horários de atendimento (todos opcionais)
+      const diasSelecionados = Array.from(
+        formCadastro.querySelectorAll('input[name="dias_semana"]:checked')
+      ).map(cb => cb.value).join(",");
+      data.append("dias_atendimento", diasSelecionados);
+      data.append("horario_inicio",   formCadastro.horario_inicio.value || "");
+      data.append("horario_fim",      formCadastro.horario_fim.value    || "");
+      data.append("horario_entrega",  formCadastro.horario_entrega.value.trim());
+
       data.append("autorizado",  formCadastro.autorizacao.checked ? "true" : "false");
 
       // Redes sociais e canais (opcionais) — normaliza protocolo
