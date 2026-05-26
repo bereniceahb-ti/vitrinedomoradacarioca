@@ -854,8 +854,8 @@
     }
 
     .card-rede {
-      width: 36px;
-      height: 36px;
+      width: 38px;
+      height: 38px;
       border-radius: 50%;
       display: inline-flex;
       align-items: center;
@@ -863,11 +863,17 @@
       background: var(--petroleo-light);
       color: var(--petroleo);
       text-decoration: none;
-      font-size: 1rem;
       border: 1.5px solid rgba(14, 111, 121, 0.18);
       transition: transform 0.22s ease, background 0.22s, color 0.22s, box-shadow 0.22s, border-color 0.22s;
     }
 
+    .card-rede svg {
+      width: 18px;
+      height: 18px;
+      display: block;
+    }
+
+    /* Hover padrão (Site e Outro link usam mostarda — paleta do projeto) */
     .card-rede:hover,
     .card-rede:focus-visible {
       background: var(--mostarda);
@@ -876,6 +882,32 @@
       box-shadow: 0 6px 16px rgba(217, 164, 0, 0.40);
       border-color: var(--mostarda-hover);
       outline: none;
+    }
+
+    /* Hovers com a cor real de cada marca — reconhecimento instantâneo */
+    .card-rede--instagram:hover,
+    .card-rede--instagram:focus-visible {
+      background: linear-gradient(45deg, #f09433 0%, #e6683c 25%, #dc2743 50%, #cc2366 75%, #bc1888 100%);
+      border-color: #bc1888;
+      box-shadow: 0 6px 16px rgba(220, 39, 67, 0.42);
+    }
+    .card-rede--facebook:hover,
+    .card-rede--facebook:focus-visible {
+      background: #1877F2;
+      border-color: #145dbf;
+      box-shadow: 0 6px 16px rgba(24, 119, 242, 0.40);
+    }
+    .card-rede--tiktok:hover,
+    .card-rede--tiktok:focus-visible {
+      background: #111111;
+      border-color: #000;
+      box-shadow: 0 6px 16px rgba(0, 0, 0, 0.38);
+    }
+    .card-rede--whatsapp:hover,
+    .card-rede--whatsapp:focus-visible {
+      background: #25D366;
+      border-color: #1ebe57;
+      box-shadow: 0 6px 16px rgba(37, 211, 102, 0.40);
     }
 
     /* ---------- Contato com a administração ---------- */
@@ -1589,17 +1621,32 @@
 
         // Bloco de redes sociais: gera um ícone clicável por link preenchido.
         // Cada ícone abre em nova aba com rel="noopener" (segurança).
+        // Ícones em SVG inline (peso desprezível, sem CDN, sem dependência).
+        // Instagram, Facebook, TikTok e WhatsApp seguem os paths oficiais
+        // (Simple Icons, MIT). Site e Outro link usam glifos do estilo Lucide.
+        const SVG_INSTAGRAM = '<svg viewBox="0 0 24 24" aria-hidden="true" focusable="false" fill="currentColor"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.266.07 1.645.07 4.849 0 3.205-.012 3.584-.07 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.012-3.583.07-4.849C2.381 3.926 3.896 2.38 7.151 2.233 8.417 2.175 8.796 2.163 12 2.163zm0 1.802c-3.15 0-3.523.012-4.77.069-2.398.109-3.487 1.215-3.596 3.596-.057 1.247-.069 1.62-.069 4.77 0 3.15.012 3.523.069 4.77.109 2.378 1.197 3.487 3.596 3.596 1.247.057 1.62.069 4.77.069 3.15 0 3.523-.012 4.77-.069 2.397-.109 3.487-1.215 3.596-3.596.057-1.247.069-1.62.069-4.77 0-3.15-.012-3.523-.069-4.77-.109-2.378-1.196-3.487-3.596-3.596C15.523 3.977 15.15 3.965 12 3.965zm0 3.064a4.971 4.971 0 110 9.942 4.971 4.971 0 010-9.942zm0 8.196a3.226 3.226 0 100-6.452 3.226 3.226 0 000 6.452zm6.39-8.392a1.16 1.16 0 11-2.32 0 1.16 1.16 0 012.32 0z"/></svg>';
+
+        const SVG_FACEBOOK = '<svg viewBox="0 0 24 24" aria-hidden="true" focusable="false" fill="currentColor"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg>';
+
+        const SVG_TIKTOK = '<svg viewBox="0 0 24 24" aria-hidden="true" focusable="false" fill="currentColor"><path d="M19.321 5.562a5.124 5.124 0 01-.443-.258 6.228 6.228 0 01-1.137-.966c-.849-.971-1.166-1.956-1.282-2.645h.004C16.368.713 16.4.087 16.404 0h-3.314v12.815c0 .172 0 .342-.007.51l-.001.063c0 .009 0 .018-.002.027v.008a2.819 2.819 0 01-1.422 2.232 2.766 2.766 0 01-1.371.36c-1.531 0-2.772-1.249-2.772-2.789a2.78 2.78 0 012.772-2.788c.288 0 .574.045.848.133l.004-3.375a6.063 6.063 0 00-4.677 1.365 6.404 6.404 0 00-1.396 1.723c-.13.221-.62 1.122-.679 2.583-.037.83.213 1.69.332 2.046v.008c.075.21.366.929.84 1.535.382.486.833.913 1.34 1.266v-.008l.008.008c1.5 1.02 3.165.953 3.165.953.272-.011 1.184 0 2.22-.491 1.148-.544 1.802-1.355 1.802-1.355a5.643 5.643 0 00.988-1.635c.272-.713.362-1.568.362-1.91V6.357c.036.021.512.337.512.337s.683.438 1.75.722c.766.203 1.797.245 1.797.245V4.347c-.36.04-1.092-.075-1.84-.45z"/></svg>';
+
+        const SVG_WHATSAPP = '<svg viewBox="0 0 24 24" aria-hidden="true" focusable="false" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>';
+
+        const SVG_SITE = '<svg viewBox="0 0 24 24" aria-hidden="true" focusable="false" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>';
+
+        const SVG_LINK = '<svg viewBox="0 0 24 24" aria-hidden="true" focusable="false" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg>';
+
         const REDES = [
-          { campo: "instagram",     icone: "📸", label: "Instagram"            },
-          { campo: "facebook",      icone: "👍", label: "Facebook"             },
-          { campo: "tiktok",        icone: "🎵", label: "TikTok"               },
-          { campo: "site",          icone: "🌐", label: "Site"                 },
-          { campo: "whatsapp_link", icone: "💬", label: "WhatsApp profissional" },
-          { campo: "outro_link",    icone: "🔗", label: "Outro link"           }
+          { campo: "instagram",     mod: "instagram", icone: SVG_INSTAGRAM, label: "Instagram"             },
+          { campo: "facebook",      mod: "facebook",  icone: SVG_FACEBOOK,  label: "Facebook"              },
+          { campo: "tiktok",        mod: "tiktok",    icone: SVG_TIKTOK,    label: "TikTok"                },
+          { campo: "site",          mod: "site",      icone: SVG_SITE,      label: "Site / loja online"    },
+          { campo: "whatsapp_link", mod: "whatsapp",  icone: SVG_WHATSAPP,  label: "WhatsApp profissional" },
+          { campo: "outro_link",    mod: "outro",     icone: SVG_LINK,      label: "Outro link"            }
         ];
         const redesLinks = REDES
           .filter(r => s[r.campo])
-          .map(r => `<a class="card-rede" href="${s[r.campo]}" target="_blank" rel="noopener noreferrer" aria-label="${r.label} de ${s.nome}" title="${r.label}">${r.icone}</a>`)
+          .map(r => `<a class="card-rede card-rede--${r.mod}" href="${s[r.campo]}" target="_blank" rel="noopener noreferrer" aria-label="${r.label} de ${s.nome}" title="${r.label}">${r.icone}</a>`)
           .join("");
         const redesHTML = redesLinks ? `<div class="card-redes" aria-label="Redes sociais e canais de contato">${redesLinks}</div>` : "";
 
