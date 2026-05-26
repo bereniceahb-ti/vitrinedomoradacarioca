@@ -820,6 +820,64 @@
       border: 1px solid rgba(14,111,121,0.3);
     }
 
+    /* ---------- Redes sociais (campos do formulário) ---------- */
+    .redes-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 14px 20px;
+      margin-top: 4px;
+    }
+
+    .redes-grid .form-row { margin-bottom: 0; }
+
+    .rede-icone {
+      display: inline-flex;
+      width: 24px;
+      height: 24px;
+      border-radius: 50%;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.85rem;
+      margin-right: 6px;
+      vertical-align: middle;
+      background: var(--petroleo-light);
+      color: var(--petroleo);
+      box-shadow: inset 0 0 0 1px rgba(14, 111, 121, 0.18);
+    }
+
+    /* ---------- Redes sociais (ícones nos cards de serviços) ---------- */
+    .card-redes {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin: 4px 0 14px;
+    }
+
+    .card-rede {
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      background: var(--petroleo-light);
+      color: var(--petroleo);
+      text-decoration: none;
+      font-size: 1rem;
+      border: 1.5px solid rgba(14, 111, 121, 0.18);
+      transition: transform 0.22s ease, background 0.22s, color 0.22s, box-shadow 0.22s, border-color 0.22s;
+    }
+
+    .card-rede:hover,
+    .card-rede:focus-visible {
+      background: var(--mostarda);
+      color: var(--branco);
+      transform: translateY(-3px) scale(1.08);
+      box-shadow: 0 6px 16px rgba(217, 164, 0, 0.40);
+      border-color: var(--mostarda-hover);
+      outline: none;
+    }
+
     /* ---------- Contato com a administração ---------- */
     .contato-wrapper {
       display: grid;
@@ -942,6 +1000,7 @@
       .form-wrapper { padding: 24px 20px; }
       .contato-wrapper { grid-template-columns: 1fr; gap: 28px; }
       .contato-card { padding: 24px 20px; }
+      .redes-grid { grid-template-columns: 1fr; gap: 12px; }
 
       section { padding: 52px 0; }
     }
@@ -1212,6 +1271,35 @@
             <input type="file" id="imagem" name="imagem" accept="image/jpeg,image/png,image/webp" />
             <small class="form-hint">📸 Anexe um cartaz, folder ou foto que represente seu serviço. Máximo 2 MB. Formatos: JPG, PNG ou WebP.</small>
             <div id="imagemPreview" class="imagem-preview"></div>
+          </div>
+
+          <p class="form-group-title">🔗 Redes sociais e canais de contato (opcional)</p>
+
+          <div class="redes-grid">
+            <div class="form-row">
+              <label for="instagram"><span class="rede-icone" aria-hidden="true">📸</span>Instagram</label>
+              <input type="text" inputmode="url" id="instagram" name="instagram" placeholder="https://instagram.com/seuperfil" />
+            </div>
+            <div class="form-row">
+              <label for="facebook"><span class="rede-icone" aria-hidden="true">👍</span>Facebook</label>
+              <input type="text" inputmode="url" id="facebook" name="facebook" placeholder="https://facebook.com/suapagina" />
+            </div>
+            <div class="form-row">
+              <label for="tiktok"><span class="rede-icone" aria-hidden="true">🎵</span>TikTok</label>
+              <input type="text" inputmode="url" id="tiktok" name="tiktok" placeholder="https://tiktok.com/@seuperfil" />
+            </div>
+            <div class="form-row">
+              <label for="site"><span class="rede-icone" aria-hidden="true">🌐</span>Site pessoal ou loja online</label>
+              <input type="text" inputmode="url" id="site" name="site" placeholder="https://seusite.com.br" />
+            </div>
+            <div class="form-row">
+              <label for="whatsapp_link"><span class="rede-icone" aria-hidden="true">💬</span>Link do WhatsApp profissional</label>
+              <input type="text" inputmode="url" id="whatsapp_link" name="whatsapp_link" placeholder="https://wa.me/5511999999999" />
+            </div>
+            <div class="form-row">
+              <label for="outro_link"><span class="rede-icone" aria-hidden="true">🔗</span>Outro link importante</label>
+              <input type="text" inputmode="url" id="outro_link" name="outro_link" placeholder="https://..." />
+            </div>
           </div>
 
           <p class="form-group-title">✅ Autorização</p>
@@ -1499,6 +1587,22 @@
           entregaHTML = `<div class="entrega-info">${linhaEntrega}${linhaArea}${linhaTaxa}</div>`;
         }
 
+        // Bloco de redes sociais: gera um ícone clicável por link preenchido.
+        // Cada ícone abre em nova aba com rel="noopener" (segurança).
+        const REDES = [
+          { campo: "instagram",     icone: "📸", label: "Instagram"            },
+          { campo: "facebook",      icone: "👍", label: "Facebook"             },
+          { campo: "tiktok",        icone: "🎵", label: "TikTok"               },
+          { campo: "site",          icone: "🌐", label: "Site"                 },
+          { campo: "whatsapp_link", icone: "💬", label: "WhatsApp profissional" },
+          { campo: "outro_link",    icone: "🔗", label: "Outro link"           }
+        ];
+        const redesLinks = REDES
+          .filter(r => s[r.campo])
+          .map(r => `<a class="card-rede" href="${s[r.campo]}" target="_blank" rel="noopener noreferrer" aria-label="${r.label} de ${s.nome}" title="${r.label}">${r.icone}</a>`)
+          .join("");
+        const redesHTML = redesLinks ? `<div class="card-redes" aria-label="Redes sociais e canais de contato">${redesLinks}</div>` : "";
+
         const card = document.createElement("article");
         card.className = "card";
         card.innerHTML = `
@@ -1509,6 +1613,7 @@
           <p class="descricao">${s.descricao}</p>
           <p class="bloco">📍 ${s.bloco}</p>
           ${entregaHTML}
+          ${redesHTML}
           <a href="${linkWhats}" target="_blank" rel="noopener" class="btn-whatsapp" aria-label="Contatar ${s.nome} via WhatsApp">
             💬 Falar no WhatsApp
           </a>
@@ -1568,6 +1673,18 @@
         menuToggle.setAttribute("aria-expanded", "false");
       });
     });
+
+    /* ---------------------------------------------------------
+       Utilitário: normaliza URL — se o usuário digitou um link
+       sem http:// ou https://, prefixa https:// automaticamente.
+       Retorna "" para entradas vazias.
+       --------------------------------------------------------- */
+    function normalizarUrl(valor) {
+      const v = String(valor || "").trim();
+      if (!v) return "";
+      if (/^https?:\/\//i.test(v)) return v;
+      return "https://" + v;
+    }
 
     /* ---------------------------------------------------------
        Utilitário: lê um arquivo como base64
@@ -1654,6 +1771,14 @@
       data.append("area_entrega",  formCadastro.area_entrega.value);
       data.append("taxa_entrega",  formCadastro.taxa_entrega.value);
       data.append("autorizado",  formCadastro.autorizacao.checked ? "true" : "false");
+
+      // Redes sociais e canais (opcionais) — normaliza protocolo
+      data.append("instagram",     normalizarUrl(formCadastro.instagram.value));
+      data.append("facebook",      normalizarUrl(formCadastro.facebook.value));
+      data.append("tiktok",        normalizarUrl(formCadastro.tiktok.value));
+      data.append("site",          normalizarUrl(formCadastro.site.value));
+      data.append("whatsapp_link", normalizarUrl(formCadastro.whatsapp_link.value));
+      data.append("outro_link",    normalizarUrl(formCadastro.outro_link.value));
 
       // Imagem opcional: converte para base64
       const arquivoImagem = inputImagem.files[0];

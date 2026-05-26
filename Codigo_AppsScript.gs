@@ -7,10 +7,13 @@
 //    D: servico         E: categoria       F: descricao
 //    G: whatsapp        H: autorizado      I: aprovado
 //    J: imagem_url      K: entrega         L: area_entrega
-//    M: taxa_entrega
+//    M: taxa_entrega    N: instagram       O: facebook
+//    P: tiktok          Q: site            R: whatsapp_link
+//    S: outro_link
 //
-//  As colunas K, L e M são NOVAS — acrescente-as no cabeçalho
-//  da planilha antes de usar este código.
+//  As colunas N, O, P, Q, R e S são NOVAS (redes sociais e
+//  canais de contato) — acrescente-as no cabeçalho da planilha
+//  antes de usar este código.
 //
 //  ESTRUTURA DA ABA "Solicitações" (criada automaticamente):
 //    A: timestamp       B: status          C: nome_solicitante
@@ -67,16 +70,22 @@ function doGet(e) {
       if (aprovado !== "SIM") continue;
 
       servicos.push({
-        nome:         String(linha[1]  || ""),   // B
-        bloco:        String(linha[2]  || ""),   // C
-        servico:      String(linha[3]  || ""),   // D
-        categoria:    String(linha[4]  || ""),   // E
-        descricao:    String(linha[5]  || ""),   // F
-        whatsapp:     String(linha[6]  || ""),   // G
-        imagem_url:   String(linha[9]  || ""),   // J
-        entrega:      String(linha[10] || ""),   // K (novo)
-        area_entrega: String(linha[11] || ""),   // L (novo)
-        taxa_entrega: String(linha[12] || "")    // M (novo)
+        nome:          String(linha[1]  || ""),   // B
+        bloco:         String(linha[2]  || ""),   // C
+        servico:       String(linha[3]  || ""),   // D
+        categoria:     String(linha[4]  || ""),   // E
+        descricao:     String(linha[5]  || ""),   // F
+        whatsapp:      String(linha[6]  || ""),   // G
+        imagem_url:    String(linha[9]  || ""),   // J
+        entrega:       String(linha[10] || ""),   // K
+        area_entrega:  String(linha[11] || ""),   // L
+        taxa_entrega:  String(linha[12] || ""),   // M
+        instagram:     String(linha[13] || ""),   // N (novo)
+        facebook:      String(linha[14] || ""),   // O (novo)
+        tiktok:        String(linha[15] || ""),   // P (novo)
+        site:          String(linha[16] || ""),   // Q (novo)
+        whatsapp_link: String(linha[17] || ""),   // R (novo)
+        outro_link:    String(linha[18] || "")    // S (novo)
       });
     }
 
@@ -136,19 +145,25 @@ function processarCadastro(p) {
   // Grava linha respeitando a ordem das colunas da planilha existente
   // A coluna "aprovado" (I) começa VAZIA → a responsável preenche "SIM" para aprovar
   aba.appendRow([
-    new Date(),              // A: timestamp
-    limpar(p.nome),          // B: nome
-    limpar(p.bloco),         // C: bloco / localização
-    limpar(p.servico),       // D: serviço
-    limpar(p.categoria),     // E: categoria
-    limpar(p.descricao),     // F: descrição
-    limpar(p.whatsapp),      // G: whatsapp
-    "SIM",                   // H: autorizado (só chega aqui se autorizou)
-    "",                      // I: aprovado (PENDENTE — preencha "SIM" para publicar)
-    imagemUrl,               // J: imagem_url
-    limpar(p.entrega),       // K: entrega (novo)
-    limpar(p.area_entrega),  // L: area_entrega (novo)
-    limpar(p.taxa_entrega)   // M: taxa_entrega (novo)
+    new Date(),                // A: timestamp
+    limpar(p.nome),            // B: nome
+    limpar(p.bloco),           // C: bloco / localização
+    limpar(p.servico),         // D: serviço
+    limpar(p.categoria),       // E: categoria
+    limpar(p.descricao),       // F: descrição
+    limpar(p.whatsapp),        // G: whatsapp
+    "SIM",                     // H: autorizado (só chega aqui se autorizou)
+    "",                        // I: aprovado (PENDENTE — preencha "SIM" para publicar)
+    imagemUrl,                 // J: imagem_url
+    limpar(p.entrega),         // K: entrega
+    limpar(p.area_entrega),    // L: area_entrega
+    limpar(p.taxa_entrega),    // M: taxa_entrega
+    limpar(p.instagram),       // N: instagram      (novo)
+    limpar(p.facebook),        // O: facebook       (novo)
+    limpar(p.tiktok),          // P: tiktok         (novo)
+    limpar(p.site),            // Q: site           (novo)
+    limpar(p.whatsapp_link),   // R: whatsapp_link  (novo)
+    limpar(p.outro_link)       // S: outro_link     (novo)
   ]);
 
   // Notificação por email à responsável pelo projeto
