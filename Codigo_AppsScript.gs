@@ -312,17 +312,37 @@ function enviarEmailNotificacao(assunto, corpo) {
 // =============================================================
 
 // Converte valor da célula de horário para "HH:MM".
-// Se o usuário formatar a célula como hora, o Sheets devolve um objeto Date
-// (com data 1899-12-30) — convertemos para string. Strings já preenchidas
-// no formato "HH:MM" passam direto.
+// Quando a célula está formatada como Hora no Sheets, o Apps Script devolve
+// um Date com a data-zero 1899-12-30. Usar getHours() nesse caso é uma cilada:
+// o fuso histórico do Brasil em 1899 era LMT (-03:06:28), o que provoca
+// deslocamento de ~6 min. A forma segura é usar Utilities.formatDate com o
+// fuso horário da própria planilha.
 function formatarHoraCelula(valor) {
   if (valor === "" || valor === null || valor === undefined) return "";
   if (valor instanceof Date) {
-    var h = valor.getHours();
-    var m = valor.getMinutes();
-    return (h < 10 ? "0" + h : h) + ":" + (m < 10 ? "0" + m : m);
+    try {
+      var tz = SpreadsheetApp.getActiveSpreadsheet().getSpreadsheetTimeZone();
+      return Utilities.formatDate(valor, tz, "HH:mm");
+    } catch (err) {
+      // Fallback: extrai HH:MM da representação textual
+      var m = String(valor).match(/(\d{1,2}):(\d{2})/);
+      if (m) {
+        var h = parseInt(m[1], 10);
+        var mi = parseInt(m[2], 10);
+        return (h < 10 ? "0" + h : "" + h) + ":" + (mi < 10 ? "0" + mi : "" + mi);
+      }
+      return "";
+    }
   }
-  return String(valor).trim();
+  // Strings já preenchidas como "08:00" passam direto; remove segundos se houver.
+  var s = String(valor).trim();
+  var m2 = s.match(/^(\d{1,2}):(\d{2})/);
+  if (m2) {
+    var h2 = parseInt(m2[1], 10);
+    var mi2 = parseInt(m2[2], 10);
+    return (h2 < 10 ? "0" + h2 : "" + h2) + ":" + (mi2 < 10 ? "0" + mi2 : "" + mi2);
+  }
+  return s;
 }
 
 // Remove espaços e impede injeção de fórmulas na planilha
